@@ -469,6 +469,7 @@ export function CardEditor({
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={logoSrc(empresaLogo)} alt="" style={{ maxHeight: 28, marginBottom: 20, display: "block" }} />
               )}
+              {/* eslint-disable-next-line react-hooks/static-components -- resolveTemplate elige una plantilla del registro fijo (TEMPLATES), no crea un componente en cada render */}
               <Preview card={live} />
             </div>
           </div>

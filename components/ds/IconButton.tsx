@@ -1,4 +1,3 @@
-import type { ButtonHTMLAttributes, AnchorHTMLAttributes } from "react";
 
 type Glyph = "plus" | "arrow" | "arrowUpRight" | "linkedin" | "phone" | "mail" | "globe";
 type Variant = "hairline" | "solid";

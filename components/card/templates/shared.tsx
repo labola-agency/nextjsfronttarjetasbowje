@@ -193,7 +193,7 @@ interface ContactLinksProps {
 }
 
 /** Fila de iconos de contacto (tel, móvil, email, web, linkedin). */
-export function ContactLinks({ card, accent, size = 44 }: ContactLinksProps) {
+export function ContactLinks({ card, size = 44 }: ContactLinksProps) {
   const links: { icon: "phone" | "mail" | "globe" | "linkedin"; href: string; label: string; show: boolean }[] = [
     { icon: "phone", href: `tel:${card.mobile || card.phone}`, label: "Llamar", show: isVisible(card, "mobile") && !!(card.mobile || card.phone) },
     { icon: "mail", href: `mailto:${card.email}`, label: "Email", show: isVisible(card, "email") && !!card.email },

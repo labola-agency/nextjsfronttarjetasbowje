@@ -1,0 +1,83 @@
+name: Auto Merge Develop to Main
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: auto-merge-develop
+  cancel-in-progress: false
+
+env:
+  HUSKY: "0"            # skip git-hook install during CI `pnpm install`
+
+jobs:
+  build-and-merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4   # version comes from package.json "packageManager"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint
+        continue-on-error: true   # non-blocking for now (pre-existing errors); flip to blocking once cleaned up
+        run: pnpm lint
+
+      - name: Cache Next.js build
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Open develop → main PR
+        id: pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          number=$(gh pr list --head develop --base main --state open --json number -q '.[0].number // empty')
+          if [ -z "${number}" ]; then
+            if out=$(gh pr create -H develop -B main \
+                      -t "Merge develop into main" \
+                      -b "Automated PR triggered by push to develop." 2>&1); then
+              number=$(gh pr list --head develop --base main --state open --json number -q '.[0].number // empty')
+            elif printf '%s' "${out}" | grep -qi "no commits between"; then
+              echo "No new commits between develop and main; nothing to merge."
+              echo "merge=false" >> "${GITHUB_OUTPUT}"
+              exit 0
+            else
+              printf '%s\n' "${out}" >&2
+              exit 1
+            fi
+          fi
+          echo "Using PR #${number}"
+          echo "number=${number}" >> "${GITHUB_OUTPUT}"
+          echo "merge=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Merge PR
+        if: steps.pr.outputs.merge == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh pr merge "${{ steps.pr.outputs.number }}" --merge
