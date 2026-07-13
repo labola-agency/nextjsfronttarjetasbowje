@@ -42,6 +42,7 @@ export default async function CardPage({ params }: PageProps) {
     <div className="min-h-screen" style={{ background: p.pageBg, fontFamily: p.sans }}>
       <main className="mx-auto w-full max-w-[420px] px-4 py-8 flex flex-col gap-8">
         {/* Tarjeta (diseño autocontenido: marca + datos + "Guardar contacto") */}
+        {/* eslint-disable-next-line react-hooks/static-components -- resolveTemplate elige una plantilla del registro fijo (TEMPLATES), no crea un componente en cada render */}
         <Template card={card} />
 
         {/* Captación de lead (estilo según la tarjeta) */}
