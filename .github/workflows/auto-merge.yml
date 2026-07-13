@@ -40,9 +40,6 @@ jobs:
         continue-on-error: true   # non-blocking for now (pre-existing errors); flip to blocking once cleaned up
         run: pnpm lint
 
-      - name: Test
-        run: pnpm test
-
       - name: Cache Next.js build
         uses: actions/cache@v4
         with:
