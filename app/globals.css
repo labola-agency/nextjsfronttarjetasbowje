@@ -1,0 +1,315 @@
+/* Webfonts primero: las reglas @import deben preceder a cualquier otra. */
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400&family=Inter:wght@400;500&display=swap");
+@import "tailwindcss";
+
+/* ============================================================
+   BOWJE Design System — tokens (portados desde el design system)
+   Dark, premium, minimal: un único verde eléctrico sobre tinta
+   casi negra. Montserrat en toda la tipografía.
+   ============================================================ */
+
+:root {
+  /* —— Base palette —— */
+  --bw-ink: #1c1c1e;
+  --bw-ink-2: #252527;
+  --bw-ink-3: #2e2e31;
+  --bw-white: #ffffff;
+  --bw-black: #000000;
+
+  --bw-green: #54d222;
+  --bw-green-deep: #55af31;
+  --bw-green-bright: #29d215;
+  --bw-teal: #00ae8d;
+
+  --bw-grey-100: #f3f4f6;
+  --bw-grey-400: #9c9c9c;
+  --bw-grey-600: #4f4f4f;
+
+  --bw-hairline: rgba(255, 255, 255, 0.2);
+  --bw-hairline-soft: rgba(255, 255, 255, 0.08);
+  --bw-veil: rgba(28, 28, 30, 0.2);
+  --bw-scrim: rgba(0, 0, 0, 0.25);
+
+  /* —— Semantic aliases —— */
+  --surface-page: var(--bw-ink);
+  --surface-card: var(--bw-ink-2);
+  --surface-card-hover: var(--bw-ink-3);
+  --text-primary: var(--bw-white);
+  --text-muted: var(--bw-grey-400);
+  --text-on-accent: var(--bw-ink);
+  --accent: var(--bw-green);
+  --accent-hover: var(--bw-green-bright);
+  --accent-press: var(--bw-green-deep);
+  --border-card: var(--bw-hairline);
+  --border-divider: var(--bw-grey-600);
+
+  /* —— Type —— */
+  --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* —— Radius —— */
+  --radius-pill: 999px;
+
+  /* —— Motion —— */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+
+  /* —— Glow —— */
+  --glow-green: radial-gradient(50% 50% at 50% 50%, var(--bw-green) 0%, rgba(84, 210, 34, 0) 80%);
+}
+
+/* Mapeo de tokens a utilidades Tailwind (bg-ink, text-accent, etc.) */
+@theme inline {
+  --color-ink: var(--bw-ink);
+  --color-ink-2: var(--bw-ink-2);
+  --color-ink-3: var(--bw-ink-3);
+  --color-accent: var(--bw-green);
+  --color-accent-hover: var(--bw-green-bright);
+  --color-accent-press: var(--bw-green-deep);
+  --color-muted: var(--bw-grey-400);
+  --color-divider: var(--bw-grey-600);
+  --color-hairline: rgba(255, 255, 255, 0.2);
+
+  --font-sans: var(--font-sans);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--surface-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Hairline utilities frecuentes en la marca */
+.bw-hairline {
+  border: 0.5px solid var(--bw-hairline);
+}
+.bw-divider {
+  border: none;
+  height: 1px;
+  background: var(--border-divider);
+}
+
+/* Glow verde de fondo (uno por viewport, tras una afirmación clave) */
+.bw-glow {
+  position: absolute;
+  border-radius: 9999px;
+  background: var(--glow-green);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+::selection {
+  background: var(--bw-green);
+  color: var(--bw-ink);
+}
+
+/* ============================================================
+   Componentes BOWJE (hover por CSS para poder usarse en RSC)
+   ============================================================ */
+
+/* —— Button: píldora, único radio redondeado de la marca —— */
+.bw-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    background var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+.bw-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.bw-btn--sm {
+  padding: 8px 16px;
+  font-size: 12px;
+}
+.bw-btn--md {
+  padding: 12px 24px;
+  font-size: 14px;
+}
+.bw-btn--lg {
+  padding: 16px 32px;
+  font-size: 18px;
+}
+.bw-btn--primary {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border-color: var(--accent);
+}
+.bw-btn--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+.bw-btn--outline {
+  background: rgba(84, 210, 34, 0.06);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.bw-btn--outline:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--text-on-accent);
+}
+.bw-btn--ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--bw-hairline);
+}
+.bw-btn--ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
+/* —— IconButton: círculo —— */
+.bw-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    background var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.bw-iconbtn--hairline {
+  background: transparent;
+  border: 0.5px solid var(--bw-hairline);
+  color: var(--text-primary);
+}
+.bw-iconbtn--hairline:hover {
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+.bw-iconbtn--solid {
+  background: var(--accent);
+  border: none;
+  color: var(--text-on-accent);
+}
+.bw-iconbtn--solid:hover {
+  background: var(--accent-hover);
+  transform: scale(1.08);
+}
+
+/* —— Tag: chip en mayúsculas —— */
+.bw-tag {
+  display: inline-block;
+  padding: 6px 14px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+  border-radius: var(--radius-pill);
+}
+.bw-tag--outline {
+  background: transparent;
+  color: var(--text-muted);
+  border: 0.5px solid var(--bw-hairline);
+}
+.bw-tag--accent {
+  background: rgba(84, 210, 34, 0.1);
+  color: var(--accent);
+  border: 0.5px solid var(--accent);
+}
+.bw-tag--solid {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border: 0.5px solid var(--accent);
+}
+
+/* —— Inputs —— */
+.bw-input,
+.bw-textarea,
+.bw-select {
+  width: 100%;
+  background: var(--bw-ink);
+  color: var(--text-primary);
+  border: 0.5px solid var(--bw-hairline);
+  border-radius: 0;
+  padding: 12px 14px;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.bw-input:focus,
+.bw-textarea:focus,
+.bw-select:focus {
+  border-color: var(--accent);
+}
+.bw-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+/* —— Form de lead: estilo por tarjeta (las variables se inyectan inline
+   según la paleta de la familia: oscura Bowje / clara everyoneplus) —— */
+.lead-field {
+  width: 100%;
+  background: var(--lf-field-bg);
+  color: var(--lf-text);
+  border: 1px solid var(--lf-border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 15px;
+  outline: none;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+.lead-field::placeholder {
+  color: var(--lf-muted);
+}
+.lead-field:focus {
+  border-color: var(--lf-accent);
+}
+.lead-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--lf-muted);
+  margin-bottom: 6px;
+}
+
+/* —— Card / surface (cuadrada, hairline, sin sombra) —— */
+.bw-surface {
+  background: var(--surface-card);
+  border: 0.5px solid var(--bw-hairline);
+  border-radius: 0;
+}
