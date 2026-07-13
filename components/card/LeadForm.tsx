@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { PUBLIC_API } from "@/lib/api";
 import type { Palette } from "@/components/card/templates/shared";
 
@@ -170,9 +171,9 @@ export function LeadForm({ slug, palette }: Props) {
         />
         <span>
           Acepto la{" "}
-          <a href="/legal/privacidad" style={{ color: accent, textDecoration: "underline" }}>
+          <Link href="/legal/privacidad" style={{ color: accent, textDecoration: "underline" }}>
             política de privacidad
-          </a>{" "}
+          </Link>{" "}
           y el tratamiento de mis datos para ser contactado.
         </span>
       </label>
