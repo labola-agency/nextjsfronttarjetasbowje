@@ -48,6 +48,33 @@ export interface UpdatePasswordState {
   ok?: boolean;
 }
 
+export interface UpdateRoleState {
+  error?: string;
+  ok?: boolean;
+}
+
+/** [Admin] Cambia el rol de un usuario (administrador o usuario normal). */
+export async function updateUserRoleAction(userId: number, _prev: UpdateRoleState, formData: FormData): Promise<UpdateRoleState> {
+  const isAdmin = String(formData.get("role")) === "admin";
+
+  try {
+    await apiFetch(`/api/users/${userId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/merge-patch+json" },
+      body: JSON.stringify({ roles: [isAdmin ? "ROLE_ADMIN" : "ROLE_USER"] }),
+    });
+  } catch (e) {
+    if (e instanceof ApiError) {
+      const body = e.body as { detail?: string; "hydra:description"?: string } | null;
+      return { error: body?.detail || body?.["hydra:description"] || "No se pudo cambiar el rol." };
+    }
+    return { error: "No se pudo cambiar el rol." };
+  }
+
+  revalidatePath("/admin/reps");
+  return { ok: true };
+}
+
 /** [Admin] Actualiza la contraseña de un usuario. El backend la hashea (UserProcessor). */
 export async function updateUserPasswordAction(userId: number, _prev: UpdatePasswordState, formData: FormData): Promise<UpdatePasswordState> {
   const password = String(formData.get("password") || "");

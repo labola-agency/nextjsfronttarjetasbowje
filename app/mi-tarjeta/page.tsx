@@ -1,4 +1,5 @@
 import { apiFetch } from "@/lib/server-api";
+import { getSessionUser } from "@/lib/auth";
 import { cardPath, qrPath } from "@/lib/api";
 import { PageTitle, EmptyState, StatCard } from "@/components/panel/ui";
 import { CardEditor } from "@/components/panel/CardEditor";
@@ -10,12 +11,17 @@ import type { Card, Empresa, Template } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export default async function MiTarjetaPage() {
+  const user = await getSessionUser();
+  if (!user) return null; // el layout ya redirige; guard por tipos
+
   let cards: Card[] = [];
   let templates: Template[] = [];
   let empresas: Empresa[] = [];
   try {
+    // Acotamos a la tarjeta del propio usuario. Para un admin es necesario
+    // (el endpoint le devuelve todas); para un usuario normal es redundante.
     [cards, templates, empresas] = await Promise.all([
-      apiFetch<Card[]>("/api/cards"),
+      apiFetch<Card[]>(`/api/cards?user=${user.id}`),
       apiFetch<Template[]>("/api/templates"),
       apiFetch<Empresa[]>("/api/empresas"),
     ]);
@@ -65,6 +71,7 @@ export default async function MiTarjetaPage() {
             card={card}
             templates={templates}
             empresas={empresas}
+            lockEmpresa
             previewAside={
               <>
                 {/* Métricas de la tarjeta */}

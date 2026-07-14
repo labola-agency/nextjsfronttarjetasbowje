@@ -8,6 +8,7 @@ const NAV: NavItem[] = [
   { href: "/admin/cards", label: "Tarjetas" },
   { href: "/admin/empresas", label: "Empresas" },
   { href: "/admin/reps", label: "Usuarios" },
+  { href: "/mi-tarjeta", label: "Mi tarjeta" },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
