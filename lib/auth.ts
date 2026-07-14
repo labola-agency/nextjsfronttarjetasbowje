@@ -89,6 +89,31 @@ export async function login(
   return { ok: true, user: data.user };
 }
 
+/** Canjea un token SSO del portal por una sesión y la persiste en cookies. */
+export async function ssoLogin(
+  token: string,
+): Promise<{ ok: true; user: SessionUser } | { ok: false; error: string }> {
+  let res: Response;
+  try {
+    res = await fetch(`${API}/api/sso/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+      cache: "no-store",
+    });
+  } catch {
+    return { ok: false, error: "No se pudo conectar con el servidor." };
+  }
+
+  if (!res.ok) {
+    return { ok: false, error: "Enlace de acceso inválido o caducado." };
+  }
+
+  const data = (await res.json()) as LoginResult;
+  await persistSession(data);
+  return { ok: true, user: data.user };
+}
+
 /** Intenta renovar el JWT con el refresh token. Devuelve el nuevo token o null. */
 export async function refreshSession(): Promise<string | null> {
   const refresh = await getRefreshToken();
