@@ -4,7 +4,7 @@ import { brand, contactRows, initials, PhotoImg, photoSrc, resolvePalette, saveH
  * 1c · Bowje "editorial" — foto a sangre con degradado, nombre gigante con
  * trazo, campos en rejilla de 2 columnas y botón cuadrado. Familia oscura.
  */
-export function OscuraEditorial({ card }: CardTemplateProps) {
+export function OscuraEditorial({ card, preview }: CardTemplateProps) {
   const p = resolvePalette(card);
   const b = brand(card);
   const rows = contactRows(card);
@@ -66,7 +66,7 @@ export function OscuraEditorial({ card }: CardTemplateProps) {
         </div>
 
         <a
-          href={saveHref(card)}
+          href={preview ? undefined : saveHref(card)}
           style={{ display: "block", marginTop: 26, padding: 15, borderRadius: 2, background: p.primary, color: "#0e0e0e", fontWeight: 700, fontSize: 14, letterSpacing: ".02em", textAlign: "center", textTransform: "uppercase", textDecoration: "none" }}
         >
           Guardar contacto ↓

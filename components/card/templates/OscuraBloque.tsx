@@ -12,7 +12,7 @@ import {
  * 1b · Bowje "bloque" — cabecera con el color de marca (foto circular + nombre
  * en tinta) sobre un cuerpo oscuro con los datos. Botón de contorno.
  */
-export function OscuraBloque({ card }: CardTemplateProps) {
+export function OscuraBloque({ card, preview }: CardTemplateProps) {
   const p = resolvePalette(card);
   const b = brand(card);
   const rows = contactRows(card);
@@ -60,7 +60,7 @@ export function OscuraBloque({ card }: CardTemplateProps) {
         </div>
 
         <a
-          href={saveHref(card)}
+          href={preview ? undefined : saveHref(card)}
           style={{
             display: "block",
             marginTop: 26,

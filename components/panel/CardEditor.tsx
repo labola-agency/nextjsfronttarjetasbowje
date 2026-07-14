@@ -3,6 +3,7 @@
 import { useActionState, useRef, useState, useTransition, type ChangeEvent, type CSSProperties, type MouseEvent, type PointerEvent, type ReactNode } from "react";
 import { deleteCardPhotoAction, type CardFormState } from "@/lib/actions/cards";
 import { cardPath, logoSrc } from "@/lib/api";
+import { compressImage } from "@/lib/image";
 import { Button } from "@/components/ds";
 import { resolveTemplate } from "@/components/card/templates/registry";
 import { initials, theme } from "@/components/card/templates/shared";
@@ -130,6 +131,7 @@ export function CardEditor({
   const [live, setLive] = useState<CardPublic>(card ?? DRAFT);
   // Preview local (blob) de la foto recién elegida, antes de guardarla.
   const [photoPreview, setPhotoPreview] = useState<string | undefined>(undefined);
+  const [compressing, setCompressing] = useState(false);
   const photoPreviewRef = useRef<string | undefined>(undefined);
   // Marca si el usuario ha quitado la foto guardada (para volver a las iniciales).
   const [photoRemoved, setPhotoRemoved] = useState(false);
@@ -169,9 +171,28 @@ export function CardEditor({
     fileInputRef.current?.click();
   }
 
-  // Al elegir un archivo, genera una URL local para previsualizarlo al instante.
-  function handlePhotoChange(e: ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
+  // Al elegir un archivo, lo comprime en el navegador (para no chocar con los
+  // límites de subida) y genera una URL local para previsualizarlo al instante.
+  async function handlePhotoChange(e: ChangeEvent<HTMLInputElement>) {
+    const input = e.target;
+    let file = input.files?.[0];
+    if (file) {
+      setCompressing(true);
+      try {
+        const compressed = await compressImage(file);
+        if (compressed !== file) {
+          // Sustituimos el archivo del input por el comprimido: es el que se subirá.
+          const dt = new DataTransfer();
+          dt.items.add(compressed);
+          input.files = dt.files;
+          file = compressed;
+        }
+      } catch {
+        // Si la compresión falla, subimos el original (mejor eso que bloquear).
+      } finally {
+        setCompressing(false);
+      }
+    }
     if (photoPreviewRef.current) URL.revokeObjectURL(photoPreviewRef.current);
     const url = file ? URL.createObjectURL(file) : undefined;
     photoPreviewRef.current = url;
@@ -180,7 +201,7 @@ export function CardEditor({
     photoRemovedRef.current = false;
     setPhotoRemoved(false);
     applyPhotoPos({ x: 50, y: 50 });
-    if (e.target.form) syncLive(e.target.form);
+    if (input.form) syncLive(input.form);
   }
 
   // Cambia el modo de encaje y actualiza la vista previa del layout en vivo.
@@ -429,7 +450,7 @@ export function CardEditor({
               style={{ display: "none" }}
             />
             <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 6 }}>
-              PNG, JPG, WEBP o SVG (máx. 2 MB). Si no subes ninguna, se muestran tus iniciales.
+              PNG, JPG, WEBP o SVG. Las fotos grandes se optimizan automáticamente al subirlas. Si no subes ninguna, se muestran tus iniciales.
             </p>
           </div>
         );
@@ -459,8 +480,8 @@ export function CardEditor({
       {state.ok && <p style={{ color: "var(--accent)", fontSize: 14 }}>Cambios guardados.</p>}
 
       <div>
-        <Button type="submit" variant="primary" disabled={pending}>
-          {pending ? "Guardando…" : submitLabel}
+        <Button type="submit" variant="primary" disabled={pending || compressing}>
+          {compressing ? "Optimizando imagen…" : pending ? "Guardando…" : submitLabel}
         </Button>
       </div>
     </form>
@@ -485,7 +506,7 @@ export function CardEditor({
                 <img src={logoSrc(empresaLogo)} alt="" style={{ maxHeight: 28, marginBottom: 20, display: "block" }} />
               )}
               {/* eslint-disable-next-line react-hooks/static-components -- resolveTemplate elige una plantilla del registro fijo (TEMPLATES), no crea un componente en cada render */}
-              <Preview card={live} />
+              <Preview card={live} preview />
             </div>
           </div>
         </div>
