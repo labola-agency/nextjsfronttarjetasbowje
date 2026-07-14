@@ -103,6 +103,7 @@ export function CardEditor({
   templates,
   users,
   empresas,
+  lockEmpresa = false,
   submitLabel = "Guardar cambios",
   showPreview = true,
   previewAside,
@@ -112,6 +113,9 @@ export function CardEditor({
   templates: Template[];
   users?: User[];
   empresas?: Empresa[];
+  // Si es true, la empresa se muestra fija (no editable): el usuario solo puede
+  // cambiar de plantilla dentro de esa empresa. La empresa la asigna el admin.
+  lockEmpresa?: boolean;
   submitLabel?: string;
   showPreview?: boolean;
   previewAside?: ReactNode;
@@ -262,14 +266,25 @@ export function CardEditor({
             <label className="bw-label" htmlFor="f-empresa">
               Empresa (marca)
             </label>
-            <select id="f-empresa" name="empresaId" className="bw-select" value={empresaId} onChange={(e) => setEmpresaId(e.target.value)}>
-              <option value="">— Sin empresa —</option>
-              {empresas.map((e) => (
-                <option key={e.id} value={e.id}>
-                  {e.name}
-                </option>
-              ))}
-            </select>
+            {lockEmpresa ? (
+              // La empresa la fija el admin: solo lectura. El hidden conserva el
+              // valor para que syncLive y el envío del formulario funcionen igual.
+              <>
+                <div id="f-empresa" className="bw-input" aria-readonly="true" style={{ opacity: 0.85 }}>
+                  {empresas.find((e) => String(e.id) === empresaId)?.name ?? "Sin empresa asignada"}
+                </div>
+                <input type="hidden" name="empresaId" value={empresaId} />
+              </>
+            ) : (
+              <select id="f-empresa" name="empresaId" className="bw-select" value={empresaId} onChange={(e) => setEmpresaId(e.target.value)}>
+                <option value="">— Sin empresa —</option>
+                {empresas.map((e) => (
+                  <option key={e.id} value={e.id}>
+                    {e.name}
+                  </option>
+                ))}
+              </select>
+            )}
           </div>
           <div>
             <label className="bw-label" htmlFor="f-template">

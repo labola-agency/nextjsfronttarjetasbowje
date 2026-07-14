@@ -92,6 +92,9 @@ export async function createMyCardAction(): Promise<void> {
   await apiFetch("/api/cards", {
     method: "POST",
     body: JSON.stringify({
+      // La tarjeta es del usuario autenticado. Necesario para un admin, porque
+      // CardProcessor solo fuerza el dueño automáticamente para los no-admin.
+      user: `/api/users/${user.id}`,
       displayName: user.name,
       email: user.email,
       isPublished: false,

@@ -1,12 +1,15 @@
 import { apiFetch } from "@/lib/server-api";
+import { getSessionUser } from "@/lib/auth";
 import { PageTitle, EmptyState } from "@/components/panel/ui";
 import { Button } from "@/components/ds";
 import { UserPasswordForm } from "@/components/panel/UserPasswordForm";
+import { UserRoleForm } from "@/components/panel/UserRoleForm";
 import type { User } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminRepsPage() {
+  const me = await getSessionUser();
   let users: User[] = [];
   try {
     users = await apiFetch<User[]>("/api/users");
@@ -46,7 +49,9 @@ export default async function AdminRepsPage() {
                   <td style={cell}>{u.name}</td>
                   <td style={{ ...cell, color: "var(--text-muted)" }}>{u.email}</td>
                   <td style={cell}>{u.jobTitle || "—"}</td>
-                  <td style={cell}>{u.roles.includes("ROLE_ADMIN") ? "Admin" : "Usuario"}</td>
+                  <td style={cell}>
+                    <UserRoleForm userId={u.id} isAdmin={u.roles.includes("ROLE_ADMIN")} self={me?.id === u.id} />
+                  </td>
                   <td style={cell}>
                     <UserPasswordForm userId={u.id} />
                   </td>
