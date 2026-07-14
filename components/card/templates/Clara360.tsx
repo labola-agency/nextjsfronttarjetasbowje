@@ -5,7 +5,7 @@ import { brand, contactRows, isVisible, Photo, resolvePalette, saveHref, type Ca
  * "360" de marca de agua), foto circular, campos en rejilla y botón blanco.
  * Pertenece a la familia clara (fondo de página crema) pero con cuerpo oscuro.
  */
-export function Clara360({ card }: CardTemplateProps) {
+export function Clara360({ card, preview }: CardTemplateProps) {
   const p = resolvePalette(card);
   const b = brand(card);
   const rows = contactRows(card);
@@ -57,7 +57,7 @@ export function Clara360({ card }: CardTemplateProps) {
         </div>
 
         <a
-          href={saveHref(card)}
+          href={preview ? undefined : saveHref(card)}
           style={{ display: "block", marginTop: 26, padding: 15, borderRadius: 999, background: "#fff", color: ink, fontWeight: 700, fontSize: 15, textAlign: "center", textDecoration: "none" }}
         >
           Guardar contacto

@@ -5,6 +5,8 @@ import { logoSrc, vcardUrl } from "@/lib/api";
 
 export interface CardTemplateProps {
   card: CardPublic;
+  /** En la vista previa del editor el botón "Guardar contacto" es solo decorativo (sin descarga). */
+  preview?: boolean;
 }
 
 /** Marca de cabecera: logo subido de la empresa o, si no, su nombre. */

@@ -12,7 +12,7 @@ import {
  * 1d · everyoneplus "limpia" — fondo crema, tarjeta blanca redondeada, foto
  * circular, filas de datos y botón píldora. Familia clara (primario por empresa).
  */
-export function ClaraLimpia({ card }: CardTemplateProps) {
+export function ClaraLimpia({ card, preview }: CardTemplateProps) {
   const p = resolvePalette(card);
   const b = brand(card);
   const rows = contactRows(card);
@@ -63,7 +63,7 @@ export function ClaraLimpia({ card }: CardTemplateProps) {
       </div>
 
       <a
-        href={saveHref(card)}
+        href={preview ? undefined : saveHref(card)}
         style={{ display: "block", marginTop: 22, padding: 15, borderRadius: 999, background: p.primary, color: "#fff", fontWeight: 700, fontSize: 15, textAlign: "center", textDecoration: "none" }}
       >
         Guardar contacto

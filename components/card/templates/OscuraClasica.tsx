@@ -12,7 +12,7 @@ import {
  * 1a · Bowje "clásica" — tarjeta oscura con foto cuadrada de borde primario,
  * filas etiqueta/valor y botón píldora. Familia oscura (primario por empresa).
  */
-export function OscuraClasica({ card }: CardTemplateProps) {
+export function OscuraClasica({ card, preview }: CardTemplateProps) {
   const p = resolvePalette(card);
   const b = brand(card);
   const rows = contactRows(card);
@@ -75,7 +75,7 @@ export function OscuraClasica({ card }: CardTemplateProps) {
       </div>
 
       <a
-        href={saveHref(card)}
+        href={preview ? undefined : saveHref(card)}
         style={{
           display: "block",
           marginTop: 24,

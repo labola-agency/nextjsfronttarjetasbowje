@@ -14,7 +14,7 @@ const ICONS: Record<string, string> = {
  * 1f · everyoneplus "pop" — fondo crema con aros de marca, foto en aro punteado,
  * nombre gigante centrado y contactos en "chips". Familia clara.
  */
-export function ClaraPop({ card }: CardTemplateProps) {
+export function ClaraPop({ card, preview }: CardTemplateProps) {
   const p = resolvePalette(card);
   const b = brand(card);
   const rows = contactRows(card).filter((r) => r.key !== "company");
@@ -85,7 +85,7 @@ export function ClaraPop({ card }: CardTemplateProps) {
         </div>
 
         <a
-          href={saveHref(card)}
+          href={preview ? undefined : saveHref(card)}
           style={{ display: "block", marginTop: 24, padding: 16, borderRadius: 999, background: p.primary, color: "#fff", fontWeight: 800, fontSize: 15, textAlign: "center", textDecoration: "none" }}
         >
           Guardar contacto
