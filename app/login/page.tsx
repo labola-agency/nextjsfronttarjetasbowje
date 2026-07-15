@@ -57,10 +57,6 @@ export default function LoginPage() {
             </Button>
           </form>
         </div>
-
-        <p style={{ textAlign: "center", fontSize: 12, color: "var(--text-muted)" }}>
-          Demo: admin@bowje.es / admin1234 · laura@bowje.es / laura1234
-        </p>
       </div>
     </div>
   );
