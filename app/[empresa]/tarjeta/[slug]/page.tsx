@@ -65,10 +65,6 @@ export default async function CardPage({ params }: PageProps) {
           <LeadForm slug={card.slug} palette={p} />
         </section>
       </main>
-
-      <footer className="py-8 text-center" style={{ color: p.muted, fontSize: 11, letterSpacing: "0.08em" }}>
-        <span style={{ textTransform: "uppercase" }}>Creative solutions for today</span>
-      </footer>
     </div>
   );
 }

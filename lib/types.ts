@@ -21,7 +21,6 @@ export interface CardTheme {
   photoFit?: "cover" | "contain";
   layout?: string;
   visibleFields?: string[];
-  tagline?: string;
 }
 
 export interface CardPublic {

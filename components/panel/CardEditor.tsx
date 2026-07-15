@@ -74,7 +74,6 @@ function buildLiveCard(form: HTMLFormElement, card: Card | undefined, template: 
     config: {
       colors: tplCfg?.colors ?? { primary: "#54D222", bg: "#1C1C1E", text: "#FFFFFF" },
       layout: tplCfg?.layout ?? "minimal",
-      tagline: g("tagline") || undefined,
       photoUrl: photoOverride ?? (photoRemoved ? undefined : card?.config?.photoUrl),
       photoPosition: photoPos,
       photoFit,
@@ -468,7 +467,6 @@ export function CardEditor({
         <Input name="postalCode" label="Código postal" defaultValue={card?.postalCode} />
         <Input name="country" label="País" defaultValue={card?.country} />
         <Input name="linkedin" label="LinkedIn" defaultValue={card?.linkedin} />
-        <Input name="tagline" label="Tagline" defaultValue={card?.config?.tagline} />
       </div>
 
       <label className="flex items-center gap-2 text-sm" style={{ color: "var(--text-muted)" }}>
