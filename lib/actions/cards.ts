@@ -41,11 +41,10 @@ function cardPayloadFromForm(formData: FormData): Record<string, unknown> {
     country: get("country"),
     linkedin: get("linkedin"),
     isPublished: formData.get("isPublished") === "on",
-    // El color/diseño lo pone el backend desde la plantilla; aquí solo el tagline.
+    // El color/diseño lo pone el backend desde la plantilla.
     // Se reenvía la foto actual para que el merge-patch no la borre (la nueva, si
     // la hay, se sube aparte en uploadPhotoIfPresent y sobrescribe este valor).
     config: {
-      tagline: get("tagline") || undefined,
       // Cadena = conserva la foto; null = la borra explícitamente en el merge-patch.
       photoUrl: get("currentPhotoUrl"),
       // Punto focal para reencuadrar la foto (object-position), en % 0–100.

@@ -24,19 +24,6 @@ export function Minimal({ card }: CardTemplateProps) {
         )}
       </div>
       <ContactLinks card={card} accent={t.primary} />
-      {card.config?.tagline && (
-        <p
-          style={{
-            marginTop: 8,
-            fontSize: 11,
-            letterSpacing: "0.18em",
-            color: "var(--text-muted)",
-            textTransform: "uppercase",
-          }}
-        >
-          {card.config.tagline}
-        </p>
-      )}
     </div>
   );
 }
