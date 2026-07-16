@@ -494,10 +494,10 @@ export function CardEditor({
   if (!showPreview) return form;
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start lg:items-end">
       {form}
 
-      <div className="flex flex-col gap-6 lg:sticky lg:top-6">
+      <div className="flex flex-col gap-6 lg:sticky lg:bottom-6">
         <div>
           <p style={{ fontSize: 12, letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--text-muted)", marginBottom: 10 }}>
             Vista previa (tamaño real en móvil)
