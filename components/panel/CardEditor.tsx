@@ -4,6 +4,7 @@ import { useActionState, useRef, useState, useTransition, type ChangeEvent, type
 import { deleteCardPhotoAction, type CardFormState } from "@/lib/actions/cards";
 import { cardPath, logoSrc } from "@/lib/api";
 import { compressImage } from "@/lib/image";
+import { BOWJE_CARD_DEFAULTS } from "@/lib/card-defaults";
 import { Button } from "@/components/ds";
 import { resolveTemplate } from "@/components/card/templates/registry";
 import { initials, theme } from "@/components/card/templates/shared";
@@ -280,49 +281,21 @@ export function CardEditor({
         </div>
       )}
 
-      {empresas && empresas.length > 0 && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="bw-label" htmlFor="f-empresa">
-              Empresa (marca)
-            </label>
-            {lockEmpresa ? (
-              // La empresa la fija el admin: solo lectura. El hidden conserva el
-              // valor para que syncLive y el envío del formulario funcionen igual.
-              <>
-                <div id="f-empresa" className="bw-input" aria-readonly="true" style={{ opacity: 0.85 }}>
-                  {empresas.find((e) => String(e.id) === empresaId)?.name ?? "Sin empresa asignada"}
-                </div>
-                <input type="hidden" name="empresaId" value={empresaId} />
-              </>
-            ) : (
-              <select id="f-empresa" name="empresaId" className="bw-select" value={empresaId} onChange={(e) => setEmpresaId(e.target.value)}>
-                <option value="">— Sin empresa —</option>
-                {empresas.map((e) => (
-                  <option key={e.id} value={e.id}>
-                    {e.name}
-                  </option>
-                ))}
-              </select>
-            )}
-          </div>
-          <div>
-            <label className="bw-label" htmlFor="f-template">
-              Plantilla
-            </label>
-            <select id="f-template" name="templateId" className="bw-select" value={templateId} onChange={(e) => setTemplateId(e.target.value)}>
-              <option value="">{empresaId ? "— Elige una plantilla —" : "Elige antes la empresa"}</option>
-              {templatesForEmpresa.map((t) => (
-                <option key={t.id} value={t.id}>
-                  {t.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      )}
-
       <Input name="displayName" label="Nombre visible*" defaultValue={card?.displayName} />
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <Input name="jobTitle" label="Cargo" defaultValue={card?.jobTitle} />
+        <Input name="company" label="Empresa (texto en la tarjeta)" defaultValue={card ? card.company : BOWJE_CARD_DEFAULTS.company} />
+        <Input name="mobile" label="Móvil" defaultValue={card?.mobile} />
+        <Input name="phone" label="Teléfono" defaultValue={card ? card.phone : BOWJE_CARD_DEFAULTS.phone} />
+        <Input name="email" label="Email" defaultValue={card?.email} />
+        <Input name="website" label="Web" defaultValue={card ? card.website : BOWJE_CARD_DEFAULTS.website} />
+        <Input name="addressLine" label="Dirección" defaultValue={card ? card.addressLine : BOWJE_CARD_DEFAULTS.addressLine} />
+        <Input name="city" label="Ciudad" defaultValue={card ? card.city : BOWJE_CARD_DEFAULTS.city} />
+        <Input name="postalCode" label="Código postal" defaultValue={card ? card.postalCode : BOWJE_CARD_DEFAULTS.postalCode} />
+        <Input name="country" label="País" defaultValue={card ? card.country : BOWJE_CARD_DEFAULTS.country} />
+        <Input name="linkedin" label="LinkedIn" defaultValue={card?.linkedin} />
+      </div>
 
       {(() => {
         const photoThumb = photoPreview ?? (photoRemoved ? undefined : logoSrc(card?.config?.photoUrl));
@@ -455,24 +428,57 @@ export function CardEditor({
         );
       })()}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Input name="jobTitle" label="Cargo" defaultValue={card?.jobTitle} />
-        <Input name="company" label="Empresa (texto en la tarjeta)" defaultValue={card?.company} />
-        <Input name="phone" label="Teléfono" defaultValue={card?.phone} />
-        <Input name="mobile" label="Móvil" defaultValue={card?.mobile} />
-        <Input name="email" label="Email" defaultValue={card?.email} />
-        <Input name="website" label="Web" defaultValue={card?.website} />
-        <Input name="addressLine" label="Dirección" defaultValue={card?.addressLine} />
-        <Input name="city" label="Ciudad" defaultValue={card?.city} />
-        <Input name="postalCode" label="Código postal" defaultValue={card?.postalCode} />
-        <Input name="country" label="País" defaultValue={card?.country} />
-        <Input name="linkedin" label="LinkedIn" defaultValue={card?.linkedin} />
-      </div>
-
       <label className="flex items-center gap-2 text-sm" style={{ color: "var(--text-muted)" }}>
-        <input type="checkbox" name="isPublished" defaultChecked={card?.isPublished ?? false} style={{ accentColor: "var(--accent)" }} />
+        <input type="checkbox" name="isPublished" defaultChecked={card ? (card.isPublished ?? false) : true} style={{ accentColor: "var(--accent)" }} />
         {card?.slug ? `Publicada (visible en ${cardPath(card.empresa, card.slug)})` : "Publicada (visible al público)"}
       </label>
+
+      {empresas && empresas.length > 0 && (
+        <div className="flex flex-col gap-3" style={{ borderTop: "1px solid var(--border, rgba(0,0,0,0.12))", paddingTop: 18 }}>
+          <p style={{ fontSize: 13, color: "var(--text-muted)" }}>
+            Elige el diseño de tu tarjeta. Al cambiarlo lo verás al instante en la vista previa.
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="bw-label" htmlFor="f-empresa">
+                Empresa (marca)
+              </label>
+              {lockEmpresa ? (
+                // La empresa la fija el admin: solo lectura. El hidden conserva el
+                // valor para que syncLive y el envío del formulario funcionen igual.
+                <>
+                  <div id="f-empresa" className="bw-input" aria-readonly="true" style={{ opacity: 0.85 }}>
+                    {empresas.find((e) => String(e.id) === empresaId)?.name ?? "Sin empresa asignada"}
+                  </div>
+                  <input type="hidden" name="empresaId" value={empresaId} />
+                </>
+              ) : (
+                <select id="f-empresa" name="empresaId" className="bw-select" value={empresaId} onChange={(e) => setEmpresaId(e.target.value)}>
+                  <option value="">— Sin empresa —</option>
+                  {empresas.map((e) => (
+                    <option key={e.id} value={e.id}>
+                      {e.name}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
+            <div>
+              <label className="bw-label" htmlFor="f-template">
+                Diseño de la tarjeta
+              </label>
+              <select id="f-template" name="templateId" className="bw-select" value={templateId} onChange={(e) => setTemplateId(e.target.value)}>
+                <option value="">{empresaId ? "— Elige un diseño —" : "Elige antes la empresa"}</option>
+                {templatesForEmpresa.map((t) => (
+                  <option key={t.id} value={t.id}>
+                    {t.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
 
       {state.error && <p style={{ color: "#ff6b6b", fontSize: 14 }}>{state.error}</p>}
       {state.ok && <p style={{ color: "var(--accent)", fontSize: 14 }}>Cambios guardados.</p>}

@@ -58,10 +58,10 @@ export function OscuraClasica({ card, preview }: CardTemplateProps) {
               borderTop: `1px solid ${p.hairline}`,
             }}
           >
-            <span style={{ fontFamily: p.mono, fontWeight: 500, fontSize: 10.5, letterSpacing: ".09em", color: p.muted, textTransform: "uppercase" }}>
+            <span style={{ flex: "none", fontFamily: p.mono, fontWeight: 500, fontSize: 10.5, letterSpacing: ".09em", color: p.muted, textTransform: "uppercase" }}>
               {r.label}
             </span>
-            <span style={{ fontWeight: 400, fontSize: 13.5, textAlign: "right" }}>
+            <span style={{ flex: "1", minWidth: 0, overflowWrap: "anywhere", fontWeight: 400, fontSize: 13.5, textAlign: "right" }}>
               {r.href ? (
                 <a href={r.href} style={{ color: p.text }} target="_blank" rel="noopener noreferrer">
                   {r.value}

@@ -48,8 +48,8 @@ export function ClaraLimpia({ card, preview }: CardTemplateProps) {
 
         {rows.map((r) => (
           <div key={r.key} style={{ display: "flex", justifyContent: "space-between", gap: 14, padding: "10px 0", borderTop: `1px solid ${p.hairline}` }}>
-            <span style={{ fontWeight: 600, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: p.muted }}>{r.label}</span>
-            <span style={{ fontWeight: 500, fontSize: 14, textAlign: "right" }}>
+            <span style={{ flex: "none", fontWeight: 600, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: p.muted }}>{r.label}</span>
+            <span style={{ flex: "1", minWidth: 0, overflowWrap: "anywhere", fontWeight: 500, fontSize: 14, textAlign: "right" }}>
               {r.href ? (
                 <a href={r.href} style={{ color: p.text }} target="_blank" rel="noopener noreferrer">
                   {r.value}

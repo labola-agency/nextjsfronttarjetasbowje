@@ -50,9 +50,9 @@ export function OscuraEditorial({ card, preview }: CardTemplateProps) {
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "16px 20px", marginTop: 26 }}>
           {rows.map((r) => (
-            <div key={r.key} style={{ borderTop: `1px solid ${p.primary}59`, paddingTop: 9, gridColumn: r.key === "addressLine" ? "1 / -1" : undefined }}>
+            <div key={r.key} style={{ minWidth: 0, borderTop: `1px solid ${p.primary}59`, paddingTop: 9, gridColumn: r.key === "addressLine" ? "1 / -1" : undefined }}>
               <div style={{ fontFamily: p.mono, fontWeight: 500, fontSize: 9, letterSpacing: ".1em", color: p.muted, textTransform: "uppercase" }}>{r.label}</div>
-              <div style={{ fontWeight: 400, fontSize: 13, marginTop: 4 }}>
+              <div style={{ fontWeight: 400, fontSize: 13, marginTop: 4, overflowWrap: "anywhere" }}>
                 {r.href ? (
                   <a href={r.href} style={{ color: p.text }} target="_blank" rel="noopener noreferrer">
                     {r.value}

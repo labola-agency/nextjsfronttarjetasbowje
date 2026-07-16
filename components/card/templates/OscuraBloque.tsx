@@ -46,7 +46,7 @@ export function OscuraBloque({ card, preview }: CardTemplateProps) {
           {rows.map((r) => (
             <div key={r.key}>
               <div style={{ fontFamily: p.mono, fontWeight: 500, fontSize: 10, letterSpacing: ".1em", color: p.primary, textTransform: "uppercase" }}>{r.label}</div>
-              <div style={{ fontWeight: 400, fontSize: 15, marginTop: 3 }}>
+              <div style={{ fontWeight: 400, fontSize: 15, marginTop: 3, overflowWrap: "anywhere" }}>
                 {r.href ? (
                   <a href={r.href} style={{ color: p.text }} target="_blank" rel="noopener noreferrer">
                     {r.value}
