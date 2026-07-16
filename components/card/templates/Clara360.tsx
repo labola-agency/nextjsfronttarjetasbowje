@@ -41,9 +41,9 @@ export function Clara360({ card, preview }: CardTemplateProps) {
       <div style={{ padding: "24px 26px 30px" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "18px 22px" }}>
           {rows.map((r) => (
-            <div key={r.key} style={{ gridColumn: r.key === "addressLine" ? "1 / -1" : undefined }}>
+            <div key={r.key} style={{ minWidth: 0, gridColumn: r.key === "addressLine" ? "1 / -1" : undefined }}>
               <div style={{ fontWeight: 600, fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: p.primary }}>{r.label}</div>
-              <div style={{ fontWeight: 500, fontSize: 14, color: "#fff", marginTop: 4 }}>
+              <div style={{ fontWeight: 500, fontSize: 14, color: "#fff", marginTop: 4, overflowWrap: "anywhere" }}>
                 {r.href ? (
                   <a href={r.href} style={{ color: "#fff" }} target="_blank" rel="noopener noreferrer">
                     {r.value}

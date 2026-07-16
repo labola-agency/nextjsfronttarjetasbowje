@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { apiFetch, ApiError } from "@/lib/server-api";
 import { getSessionUser } from "@/lib/auth";
+import { BOWJE_CARD_DEFAULTS } from "@/lib/card-defaults";
 
 export interface CardFormState {
   error?: string;
@@ -96,7 +97,9 @@ export async function createMyCardAction(): Promise<void> {
       user: `/api/users/${user.id}`,
       displayName: user.name,
       email: user.email,
-      isPublished: false,
+      // Datos de empresa por defecto (Bowje); el usuario los puede cambiar luego.
+      ...BOWJE_CARD_DEFAULTS,
+      isPublished: true,
       config: { colors: { primary: "#54D222", bg: "#1C1C1E", text: "#FFFFFF" }, layout: "minimal" },
     }),
   });

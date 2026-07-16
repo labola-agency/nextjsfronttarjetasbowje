@@ -71,7 +71,7 @@ export function ClaraPop({ card, preview }: CardTemplateProps) {
                 {ICONS[r.key] || "•"} {r.value}
               </>
             );
-            const style: React.CSSProperties = { fontWeight: 500, fontSize: 12, color: p.text, background: p.cardBg, border: `1px solid ${p.border}`, borderRadius: 999, padding: "8px 14px", textDecoration: "none" };
+            const style: React.CSSProperties = { fontWeight: 500, fontSize: 12, color: p.text, background: p.cardBg, border: `1px solid ${p.border}`, borderRadius: 999, padding: "8px 14px", textDecoration: "none", maxWidth: "100%", overflowWrap: "anywhere" };
             return r.href ? (
               <a key={r.key} href={r.href} target="_blank" rel="noopener noreferrer" style={style}>
                 {content}
