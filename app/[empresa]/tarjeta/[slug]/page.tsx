@@ -4,6 +4,7 @@ import { getPublicCard, cardPath } from "@/lib/api";
 import { resolveTemplate } from "@/components/card/templates/registry";
 import { resolvePalette } from "@/components/card/templates/shared";
 import { LeadForm } from "@/components/card/LeadForm";
+import { ViewTracker } from "@/components/card/ViewTracker";
 
 interface PageProps {
   params: Promise<{ empresa: string; slug: string }>;
@@ -40,6 +41,8 @@ export default async function CardPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen" style={{ background: p.pageBg, fontFamily: p.sans }}>
+      {/* Cuenta la lectura desde el navegador (una apertura real de la tarjeta). */}
+      <ViewTracker slug={card.slug} />
       <main className="mx-auto w-full max-w-[420px] px-4 py-8 flex flex-col gap-8">
         {/* Tarjeta (diseño autocontenido: marca + datos + "Guardar contacto") */}
         {/* eslint-disable-next-line react-hooks/static-components -- resolveTemplate elige una plantilla del registro fijo (TEMPLATES), no crea un componente en cada render */}
